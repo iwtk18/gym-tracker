@@ -11,9 +11,11 @@ Live at: [your-url.netlify.app](https://your-url.netlify.app)
 - **Plan** reusable workout templates with exercises, sets, reps and weights
 - **Track** active sessions in real time, then complete or abandon them
 - **Log** both weights and cardio exercises (duration + distance) in the same session
-- **Review** history with a timeline view and a per-exercise progress view
+- **Review** history with a collapsible timeline view and a per-exercise progress view
 - **Analyse** volume, personal bests, most trained exercises and progression charts in Stats
 - **Filter** history and stats by year and month
+- **Reorder** exercises within a plan using up/down controls
+- **Edit** completed workouts from the History tab
 - **Back up** and restore all data via JSON export and import
 
 ## How it's built
@@ -31,16 +33,21 @@ A single HTML file — no frameworks, no build tools, no backend. All data is st
 
 - Weights and cardio support in the same workout
 - Per-exercise type toggle (Weights / Cardio) when building plans
+- Exercise reordering within a plan (up/down arrows)
 - Auto title-case and fuzzy match warning to prevent duplicate exercise names
 - Exercise library with duplicate detection, quick-select and inline rename
 - Plan copying, editing and one-time use (removed from My Plans on completion)
+- Editing a plan keeps the original intact until the new version is saved
 - Abandoning a workout restores the plan to My Plans
-- Global workout numbering (#1, #2, #3...)
+- Global workout numbering (#1, #2, #3...) locked at session start
+- Collapsible history cards in the Timeline view
+- Edit completed workouts (name and notes) from History
 - Year and month date filters on History and Stats
 - Progression chart per exercise (top weight or duration per session)
+- Toast notifications throughout — no disruptive alert popups
 - Data export and import via JSON backup file
 - Ember dark theme
-- iPhone safe area support (no clash with status bar)
+- iPhone safe area support (no clash with status bar or home indicator)
 - In-app changelog accessible via the version badge
 
 ## Data and privacy
@@ -51,19 +58,22 @@ Because data lives on your device, it is worth exporting a backup regularly usin
 
 ## Deploying updates
 
-When the app is updated, download the new `index.html` (and any other changed files) and upload them to this repository via **Add file → Upload files**. Netlify will detect the change and redeploy automatically within about 30 seconds.
+When the app is updated, download the new files and upload them to this repository via **Add file → Upload files**. Netlify will detect the change and redeploy automatically within about 30 seconds.
+
+The `sw.js` cache name is bumped with each release — this is what ensures your iPhone pulls the latest version after an update rather than serving from cache.
 
 Commit message format used in this project:
 
 ```
 Add [feature]
-Fix [bug]
-Update [thing]
+Fix [bug description]
+Update [what changed]
 ```
 
 ## Version history
 
 | Version | Date | Summary |
 |---------|------|---------|
+| v1.2 | Apr 2026 | Bug fixes, toasts, collapsible history, exercise reordering, edit completed workouts |
 | v1.1 | Mar 2026 | Cardio support, exercise library, changelog overlay, date filters, data export/import |
 | v1.0 | Mar 2026 | Initial release |

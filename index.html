@@ -36,7 +36,7 @@ h2{font-size:13px;font-weight:700;margin-bottom:.75rem;color:var(--text2);text-t
 .tab-row{display:flex;gap:4px;margin-bottom:1.2rem;}
 .tab{flex:1;text-align:center;padding:7px 2px;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--surface);color:var(--muted);user-select:none;}
 .tab.active{color:var(--accent-dark);background:var(--accent);border-color:var(--accent);font-weight:700;}
-.tab.live{border-color:var(--accent);color:var(--accent);}
+.tab.live{border-color:var(--accent);color:var(--text);}
 .date-filter-bar{display:flex;gap:8px;margin-bottom:12px;}
 .date-filter-bar select{flex:1;padding:7px 10px;font-size:12px;font-weight:600;background:var(--surface2);color:var(--text2);border:1px solid var(--border2);border-radius:8px;outline:none;cursor:pointer;}
 .date-filter-bar select:focus{border-color:var(--accent);}
@@ -102,6 +102,9 @@ textarea{resize:vertical;}
 .edit-btn:hover{background:var(--accent-dim);color:var(--accent);border-color:var(--accent-border);}
 .remove-btn{background:none;border:none;font-size:16px;cursor:pointer;color:var(--muted);flex-shrink:0;padding:0 2px;}
 .remove-btn:hover{color:var(--danger);}
+.reorder-btn{background:none;border:none;font-size:14px;cursor:pointer;color:var(--muted);flex-shrink:0;padding:0 2px;line-height:1;}
+.reorder-btn:hover{color:var(--accent);}
+.reorder-btn:disabled{opacity:0.2;cursor:default;}
 .acc-body{display:none;padding:8px 11px;font-size:12px;color:var(--text2);line-height:1.9;border-top:1px solid var(--border);background:var(--surface);}
 .cardio-item .acc-body{border-top-color:var(--cardio-border);}
 .acc-item.open .acc-body{display:block;}
@@ -146,19 +149,31 @@ textarea{resize:vertical;}
 .complete-btn:hover{background:#d97706;}
 .abandon-btn{padding:13px 16px;font-size:14px;font-weight:600;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;cursor:pointer;color:var(--muted);}
 .abandon-btn:hover{color:var(--danger);border-color:var(--danger);}
-.workout-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:10px;}
-.workout-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.workout-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;}
+.workout-card-header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem 0.75rem;cursor:pointer;user-select:none;}
+.workout-card-header:hover{background:var(--surface2);}
 .workout-card-title{font-size:14px;font-weight:700;}
 .workout-card-num{font-size:10px;color:var(--accent);font-weight:700;background:var(--accent-dim);padding:2px 7px;border-radius:20px;}
-.workout-card-date{font-size:11px;color:var(--muted);margin-bottom:6px;}
+.workout-card-date{font-size:11px;color:var(--muted);padding:0 1.25rem 0.5rem;}
+.workout-card-body{display:none;padding:0 1.25rem 1rem;}
+.workout-card.open .workout-card-body{display:block;}
 .workout-card-ex{font-size:12px;color:var(--text2);line-height:1.7;}
 .workout-card-notes{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px;}
+.workout-card-chevron{font-size:10px;color:var(--muted);transition:transform 0.2s;flex-shrink:0;margin-left:8px;}
+.workout-card.open .workout-card-chevron{transform:rotate(90deg);}
 .use-as-plan-btn{margin-top:10px;width:100%;padding:7px;font-size:12px;font-weight:600;background:transparent;border:1px solid var(--border2);border-radius:8px;cursor:pointer;color:var(--muted);}
 .use-as-plan-btn:hover{background:var(--accent-dim);color:var(--accent);border-color:var(--accent-border);}
+.history-edit-btn{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;flex-shrink:0;margin-right:4px;}
+.history-edit-btn:hover{background:var(--accent-dim);color:var(--accent);border-color:var(--accent-border);}
 .history-delete-btn{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);line-height:1;padding:0 2px;flex-shrink:0;}
 .history-delete-btn:hover{color:var(--danger);}
 .history-clear-btn{font-size:12px;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--border2);border-radius:8px;padding:5px 12px;cursor:pointer;width:100%;}
 .history-clear-btn:hover{color:var(--danger);border-color:var(--danger);}
+.edit-workout-form{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-top:10px;}
+.edit-workout-form .field{margin-bottom:8px;}
+.edit-workout-save{width:100%;padding:9px;font-size:13px;font-weight:700;background:var(--accent);color:var(--accent-dark);border:none;border-radius:8px;cursor:pointer;margin-top:4px;}
+.edit-workout-save:hover{background:#d97706;}
+.edit-workout-cancel{width:100%;padding:7px;font-size:12px;font-weight:600;background:transparent;border:1px solid var(--border2);border-radius:8px;cursor:pointer;color:var(--muted);margin-top:6px;}
 .view-toggle{display:flex;margin-bottom:12px;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .view-btn{flex:1;padding:8px;font-size:13px;font-weight:600;background:var(--surface);border:none;cursor:pointer;color:var(--muted);}
 .view-btn.active{background:var(--accent);color:var(--accent-dark);font-weight:700;}
@@ -189,8 +204,11 @@ textarea{resize:vertical;}
 .pb-row:last-child{border-bottom:none;}
 .pb-name{font-size:13px;font-weight:600;color:var(--text2);}
 .pb-val{font-size:12px;color:var(--accent);font-weight:700;}
+.toast{position:fixed;bottom:max(24px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--accent);color:var(--accent-dark);font-size:13px;font-weight:700;padding:10px 20px;border-radius:20px;opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:200;white-space:nowrap;}
+.toast.show{opacity:1;}
+.toast.error{background:#ef4444;color:#fff;}
 .changelog-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:100;display:flex;flex-direction:column;overflow:hidden;}
-.changelog-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.changelog-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;padding-top:max(1rem,env(safe-area-inset-top));border-bottom:1px solid var(--border);flex-shrink:0;}
 .changelog-title{font-size:16px;font-weight:800;letter-spacing:-0.01em;}
 .changelog-close{background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;line-height:1;padding:0;}
 .changelog-close:hover{color:var(--text);}
@@ -213,6 +231,21 @@ textarea{resize:vertical;}
       <button class="changelog-close" onclick="toggleChangelog()">&#215;</button>
     </div>
     <div class="changelog-body">
+      <div class="cl-version">
+        <div class="cl-ver-header"><span class="cl-ver-num">v1.2</span><span class="cl-ver-date">Apr 2026</span></div>
+        <div class="cl-ver-label">Polish and fixes</div>
+        <ul class="cl-list">
+          <li>Fixed: app updates now reliably reach iPhone after a deploy</li>
+          <li>Fixed: changelog close button no longer hidden behind iPhone status bar</li>
+          <li>Fixed: active Workout tab now readable (was amber text on amber background)</li>
+          <li>Fixed: workout number no longer shifts if a history entry is deleted mid-session</li>
+          <li>Fixed: editing a plan no longer deletes it before you save</li>
+          <li>Toasts replace alert() popups throughout the app</li>
+          <li>History timeline cards now collapse and expand</li>
+          <li>Exercises can be reordered up and down within a plan</li>
+          <li>Completed workouts can now be edited from the History tab</li>
+        </ul>
+      </div>
       <div class="cl-version">
         <div class="cl-ver-header"><span class="cl-ver-num">v1.1</span><span class="cl-ver-date">Mar 2026</span></div>
         <div class="cl-ver-label">Cardio support</div>
@@ -246,10 +279,13 @@ textarea{resize:vertical;}
     </div>
   </div>
 
+  <!-- Toast notification (U1) -->
+  <div id="toast" class="toast"></div>
+
   <div class="top-row">
     <h1>Gym Tracker</h1>
     <div style="display:flex;align-items:center;gap:10px">
-      <button class="version-badge" onclick="toggleChangelog()">v1.1</button>
+      <button class="version-badge" onclick="toggleChangelog()">v1.2</button>
       <div class="unit-seg">
         <button id="btn-kg" class="unit-opt active" onclick="setUnit('kg')">kg</button>
         <button id="btn-lbs" class="unit-opt" onclick="setUnit('lbs')">lbs</button>
@@ -278,14 +314,10 @@ textarea{resize:vertical;}
         <button class="library-toggle-btn" onclick="toggleLibrary()"><span id="library-toggle-label">Browse library</span></button>
         <div id="library-panel" class="library-panel" style="display:none"></div>
       </div>
-
-      <!-- Per-exercise type toggle -->
       <div class="ex-type-row">
         <button id="type-weights" class="ex-type-btn active" onclick="setExType('weights')">Weights</button>
         <button id="type-cardio" class="ex-type-btn" onclick="setExType('cardio')">Cardio</button>
       </div>
-
-      <!-- Weights builder (shown for weights exercises) -->
       <div id="weights-builder">
         <div class="set-builder">
           <div class="set-builder-title">Build your sets</div>
@@ -298,24 +330,15 @@ textarea{resize:vertical;}
           <div class="set-chips" id="set-chips"></div>
         </div>
       </div>
-
-      <!-- Cardio builder (shown for cardio exercises) -->
       <div id="cardio-builder" style="display:none">
         <div class="set-builder">
           <div class="set-builder-title">Cardio details</div>
           <div class="cardio-row-input">
-            <div class="field" style="margin:0">
-              <label>Duration (min)</label>
-              <input type="number" id="cardio-duration" placeholder="30" min="1" step="1"/>
-            </div>
-            <div class="field" style="margin:0">
-              <label>Distance (km) <span style="font-weight:400;text-transform:none;letter-spacing:0">optional</span></label>
-              <input type="number" id="cardio-distance" placeholder="0" min="0" step="0.1"/>
-            </div>
+            <div class="field" style="margin:0"><label>Duration (min)</label><input type="number" id="cardio-duration" placeholder="30" min="1" step="1"/></div>
+            <div class="field" style="margin:0"><label>Distance (km) <span style="font-weight:400;text-transform:none;letter-spacing:0">optional</span></label><input type="number" id="cardio-distance" placeholder="0" min="0" step="0.1"/></div>
           </div>
         </div>
       </div>
-
       <button class="add-btn" onclick="addExercise()">+ Add exercise</button>
       <div class="exercises-list" id="exercises-list"><p class="empty">No exercises added yet.</p></div>
       <button class="log-btn" onclick="savePlan()">Save plan</button>
@@ -409,9 +432,18 @@ var gymHistory = JSON.parse(localStorage.getItem("v6history") || "[]");
 var currentSets = [], exercises = [];
 var currentExType = "weights";
 
+// ── TOAST (U1) ────────────────────────────────────────────────────────────────
+var toastTimer = null;
+function showToast(msg, isError) {
+  var el = document.getElementById("toast");
+  if (!el) return;
+  if (toastTimer) clearTimeout(toastTimer);
+  el.textContent = msg;
+  el.className = "toast" + (isError ? " error" : "") + " show";
+  toastTimer = setTimeout(function() { el.className = "toast"; }, 2800);
+}
+
 // ── EXERCISE TYPE TOGGLE ──────────────────────────────────────────────────────
-// Switches the Plan tab builder between Weights (set/rep/weight fields)
-// and Cardio (duration + distance fields). Per-exercise, not per-plan.
 function setExType(type) {
   currentExType = type;
   var wb = document.getElementById("weights-builder");
@@ -468,7 +500,7 @@ function refreshSuggestions() {
   }).join("");
 }
 
-// ── CHANGELOG ────────────────────────────────────────────────────────────────
+// ── CHANGELOG (B4 fixed — header respects safe area) ─────────────────────────
 function toggleChangelog() {
   var el = document.getElementById("changelog-overlay");
   if (el) el.style.display = el.style.display === "none" ? "flex" : "none";
@@ -626,17 +658,19 @@ function showTab(tab, el) {
   if (tab==="history") { populateDateFilters("hist"); renderHistory(); }
   if (tab==="stats")   { populateDateFilters("stats"); renderStats(); }
 }
+
+// B3 fix: live Workout tab uses --text colour, not amber-on-amber
 function updateWorkoutTabStyle() {
   var btn = document.getElementById("tab-workout-btn");
   if (activeWorkout) btn.classList.add("live"); else btn.classList.remove("live");
 }
 
-// ── SET BUILDER (weights) ─────────────────────────────────────────────────────
+// ── SET BUILDER ───────────────────────────────────────────────────────────────
 function addSet() {
   var reps=parseInt(document.getElementById("set-reps").value);
   var wRaw=parseFloat(document.getElementById("set-weight").value);
   var count=parseInt(document.getElementById("set-count").value)||1;
-  if (!reps) { alert("Enter reps for this set."); return; }
+  if (!reps) { showToast("Enter reps for this set.", true); return; }
   var wKg=isNaN(wRaw)?0:toKg(wRaw);
   for (var k=0;k<count;k++) currentSets.push({reps:reps,weightKg:wKg});
   document.getElementById("set-count").value="";
@@ -655,28 +689,24 @@ function renderSetChips() {
 function removeSet(i) { currentSets.splice(i,1); renderSetChips(); }
 
 // ── EXERCISE BUILDER ──────────────────────────────────────────────────────────
-// Handles both types. Cardio exercises store { type, duration, distance }
-// instead of a sets array, making them backward-compatible with existing data.
 function addExercise() {
   var name = toTitleCase(document.getElementById("ex-name").value);
-  if (!name) { alert("Enter an exercise name."); return; }
-
+  if (!name) { showToast("Enter an exercise name.", true); return; }
   var similar = findSimilar(name);
   if (similar.length) {
     var ok = confirm('Similar exercise exists: "'+similar.join(', ')+'". Did you mean that? Cancel to fix, OK to add "'+name+'" anyway.');
     if (!ok) { document.getElementById("ex-name").value=name; document.getElementById("ex-name").focus(); return; }
   }
-
   var exObj;
   if (currentExType === "cardio") {
     var dur = parseFloat(document.getElementById("cardio-duration").value);
     var dist = parseFloat(document.getElementById("cardio-distance").value);
-    if (!dur || dur <= 0) { alert("Enter a duration in minutes."); return; }
+    if (!dur || dur <= 0) { showToast("Enter a duration in minutes.", true); return; }
     exObj = { name:name, type:"cardio", duration:dur, distance:(isNaN(dist)||dist<=0)?0:dist, open:false };
     document.getElementById("cardio-duration").value="";
     document.getElementById("cardio-distance").value="";
   } else {
-    if (!currentSets.length) { alert("Add at least one set."); return; }
+    if (!currentSets.length) { showToast("Add at least one set.", true); return; }
     exObj = { name:name, type:"weights", sets:currentSets.slice(), open:false };
     currentSets=[];
     document.getElementById("set-count").value="";
@@ -686,7 +716,6 @@ function addExercise() {
   document.getElementById("ex-name").value="";
   renderExercises();
 }
-
 function toggleExercise(i) { exercises[i].open=!exercises[i].open; renderExercises(); }
 function editExercise(i) {
   var e=exercises[i];
@@ -704,7 +733,14 @@ function editExercise(i) {
   document.getElementById("ex-name").focus();
 }
 
-// Returns a short summary string for an exercise (shown in accordion header)
+// F2 — move exercise up or down in the list
+function moveExercise(i, dir) {
+  var j = i + dir;
+  if (j < 0 || j >= exercises.length) return;
+  var tmp = exercises[i]; exercises[i] = exercises[j]; exercises[j] = tmp;
+  renderExercises();
+}
+
 function exSummary(e) {
   if (e.type==="cardio") {
     var s = e.duration + " min";
@@ -719,7 +755,6 @@ function exSummary(e) {
   var wl=ws.length===0?"bodyweight":mn===mx?displayWeight(mn)+unit:displayWeight(mn)+"-"+displayWeight(mx)+unit;
   return tot+" set"+(tot>1?"s":"")+" \u00b7 "+wl;
 }
-
 function renderExercises() {
   var el=document.getElementById("exercises-list");
   if (!exercises.length) { el.innerHTML='<p class="empty">No exercises added yet.</p>'; return; }
@@ -732,6 +767,8 @@ function renderExercises() {
       '<div class="acc-header" onclick="toggleExercise('+i+')">'+
         '<div class="acc-left"><div class="ex-name">'+e.name+'</div><div class="ex-summary">'+exSummary(e)+'</div></div>'+
         '<span class="acc-chevron">&#9654;</span>'+
+        '<button class="reorder-btn" onclick="event.stopPropagation();moveExercise('+i+',-1)" '+(i===0?'disabled':'')+' title="Move up">&#8593;</button>'+
+        '<button class="reorder-btn" onclick="event.stopPropagation();moveExercise('+i+',1)" '+(i===exercises.length-1?'disabled':'')+' title="Move down">&#8595;</button>'+
         '<button class="edit-btn" onclick="event.stopPropagation();editExercise('+i+')">edit</button>'+
         '<button class="remove-btn" onclick="event.stopPropagation();removeExercise('+i+')">&#215;</button>'+
       '</div>'+
@@ -744,15 +781,24 @@ function removeExercise(i) { exercises.splice(i,1); renderExercises(); }
 function savePlan() {
   var name=document.getElementById("plan-name").value.trim()||"Workout";
   var notes=document.getElementById("plan-notes").value.trim();
-  if (!exercises.length) { alert("Add at least one exercise first!"); return; }
+  if (!exercises.length) { showToast("Add at least one exercise first.", true); return; }
+  // U2 fix: if we're editing an existing plan (editingPlanId is set),
+  // remove the old version now — after we've validated the new one
+  if (typeof editingPlanId !== "undefined" && editingPlanId !== null) {
+    plans = plans.filter(function(p){ return p.id !== editingPlanId; });
+    editingPlanId = null;
+  }
   plans.unshift({id:Date.now(),name:name,notes:notes,exercises:exercises.slice(),createdAt:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})});
   localStorage.setItem("v6plans",JSON.stringify(plans));
   exercises=[];
   document.getElementById("plan-name").value="";
   document.getElementById("plan-notes").value="";
   renderExercises(); refreshSuggestions();
-  alert("Plan saved! Find it in My Plans.");
+  showToast("Plan saved!");
 }
+
+var editingPlanId = null;
+
 function loadPlanIntoForm(planObj) {
   exercises=JSON.parse(JSON.stringify(planObj.exercises)).map(function(e){return Object.assign({},e,{open:false});});
   document.getElementById("plan-name").value=planObj.name||"";
@@ -764,19 +810,22 @@ function loadPlanIntoForm(planObj) {
   document.querySelector(".tab").classList.add("active");
   document.getElementById("tab-plan").classList.add("active");
 }
+
+// U2 fix: editPlan no longer deletes the plan — it stays in place
+// until savePlan() runs successfully and removes it
+function editPlan(id) {
+  var plan=plans.find(function(p){return p.id===id;});
+  if (!plan) return;
+  editingPlanId = id;
+  loadPlanIntoForm(plan);
+}
+
 function copyPlanFromObject(planObj) {
   var copy={id:Date.now(),name:planObj.name+" (copy)",notes:planObj.notes||"",exercises:JSON.parse(JSON.stringify(planObj.exercises)),createdAt:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})};
   plans.unshift(copy); localStorage.setItem("v6plans",JSON.stringify(plans)); renderPlans();
 }
-function editPlan(id) {
-  var plan=plans.find(function(p){return p.id===id;});
-  if (!plan) return;
-  plans=plans.filter(function(p){return p.id!==id;});
-  localStorage.setItem("v6plans",JSON.stringify(plans));
-  loadPlanIntoForm(plan);
-}
 function copyPlan(id) { var p=plans.find(function(p){return p.id===id;}); if(p) copyPlanFromObject(p); }
-function copyFromHistory(id) { var w=gymHistory.find(function(h){return h.id===id;}); if(w) loadPlanIntoForm({name:w.name,notes:w.notes||"",exercises:w.exercises}); }
+function copyFromHistory(id) { var w=gymHistory.find(function(h){return h.id===id;}); if(w) { editingPlanId=null; loadPlanIntoForm({name:w.name,notes:w.notes||"",exercises:w.exercises}); } }
 
 function renderPlans() {
   var el=document.getElementById("plans-list");
@@ -819,7 +868,9 @@ function confirmDeletePlan(id) {
 function startWorkout(planId) {
   var plan=plans.find(function(p){return p.id===planId;});
   if (!plan) return;
-  activeWorkout={planId:plan.id,name:plan.name,notes:plan.notes,exercises:JSON.parse(JSON.stringify(plan.exercises)),startedAt:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),planSnapshot:JSON.parse(JSON.stringify(plan))};
+  // B2 fix: lock workout number at start time, not recalculated live
+  var lockedNum = gymHistory.length + 1;
+  activeWorkout={planId:plan.id,name:plan.name,notes:plan.notes,exercises:JSON.parse(JSON.stringify(plan.exercises)),startedAt:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),planSnapshot:JSON.parse(JSON.stringify(plan)),lockedWorkoutNum:lockedNum};
   localStorage.setItem("v6active",JSON.stringify(activeWorkout));
   updateWorkoutTabStyle();
   document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});
@@ -828,9 +879,6 @@ function startWorkout(planId) {
   document.getElementById("tab-workout").classList.add("active");
   renderWorkoutView();
 }
-
-// Renders a single exercise block in the active workout view.
-// Cardio shows a duration/distance card; weights shows the set table.
 function renderWorkoutExercise(e) {
   if (e.type==="cardio") {
     var distHtml = (e.distance&&e.distance>0)
@@ -851,11 +899,10 @@ function renderWorkoutExercise(e) {
       }).join("")+
     '</div></div>';
 }
-
 function renderWorkoutView() {
   var el=document.getElementById("workout-view");
   if (!activeWorkout) { el.innerHTML='<p class="empty" style="padding:2rem 0;text-align:center">No active workout.<br>Go to My Plans to start one.</p>'; return; }
-  var num=gymHistory.length+1;
+  var num = activeWorkout.lockedWorkoutNum || (gymHistory.length + 1);
   var html='<div class="workout-header"><div class="workout-number">Workout #'+num+'</div><div class="workout-title">'+activeWorkout.name+'</div><div class="workout-started">Started '+activeWorkout.startedAt+'</div></div>';
   if (activeWorkout.notes) html+='<div class="workout-notes-box">'+activeWorkout.notes+'</div>';
   html+=activeWorkout.exercises.map(renderWorkoutExercise).join("");
@@ -873,13 +920,13 @@ function showAbandonConfirm() {
 }
 function completeWorkout() {
   if (!activeWorkout) return;
-  var num=gymHistory.length+1;
+  var num = activeWorkout.lockedWorkoutNum || (gymHistory.length + 1);
   gymHistory.unshift({id:Date.now(),workoutNumber:num,name:activeWorkout.name,notes:activeWorkout.notes,exercises:activeWorkout.exercises,startedAt:activeWorkout.startedAt,completedDate:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})});
   localStorage.setItem("v6history",JSON.stringify(gymHistory));
   if (activeWorkout.planId) { plans=plans.filter(function(p){return p.id!==activeWorkout.planId;}); localStorage.setItem("v6plans",JSON.stringify(plans)); }
   activeWorkout=null; localStorage.removeItem("v6active");
   updateWorkoutTabStyle(); refreshSuggestions(); renderWorkoutView();
-  alert("Workout #"+num+" complete! Check History and Stats.");
+  showToast("Workout #"+num+" complete!");
 }
 function abandonWorkout() {
   if (activeWorkout && activeWorkout.planSnapshot) {
@@ -901,7 +948,12 @@ function setHistoryView(view) {
 }
 function renderHistory() { if (historyView==="timeline") renderTimeline(); else renderProgress(); }
 
-// History timeline shows cardio exercises inline with weights
+// U3 — history cards are collapsible; toggle open/closed on header tap
+function toggleHistoryCard(id) {
+  var card = document.getElementById("hcard-"+id);
+  if (card) card.classList.toggle("open");
+}
+
 function renderTimeline() {
   var data=getFilteredHistory("hist");
   var names=["All"].concat(data.map(function(w){return w.name;}).filter(function(v,i,a){return a.indexOf(v)===i;}));
@@ -926,25 +978,67 @@ function renderTimeline() {
       return "<strong>"+e.name+"</strong>: "+(e.sets||[]).map(function(s,si){return "Set "+(si+1)+": "+s.reps+" reps"+(s.weightKg?" @ "+displayWeight(s.weightKg)+unit:"");}).join(", ");
     }).join("<br>");
     return '<div class="workout-card" id="hcard-'+w.id+'">'+
-      '<div class="workout-card-header">'+
-        '<div><div class="workout-card-title">'+w.name+'</div></div>'+
-        '<div style="display:flex;align-items:center;gap:8px">'+
+      '<div class="workout-card-header" onclick="toggleHistoryCard('+w.id+')">'+
+        '<div class="workout-card-title">'+w.name+'</div>'+
+        '<div style="display:flex;align-items:center;gap:6px">'+
           '<div class="workout-card-num">#'+w.workoutNumber+'</div>'+
-          '<button class="history-delete-btn" data-id="'+w.id+'" onclick="deleteHistoryEntry('+w.id+')">&#215;</button>'+
+          '<button class="history-edit-btn" onclick="event.stopPropagation();showEditWorkout('+w.id+')">Edit</button>'+
+          '<button class="history-delete-btn" data-id="'+w.id+'" onclick="event.stopPropagation();deleteHistoryEntry('+w.id+')">&#215;</button>'+
+          '<span class="workout-card-chevron">&#9654;</span>'+
         '</div>'+
       '</div>'+
       '<div class="workout-card-date">'+w.completedDate+'</div>'+
-      '<div class="workout-card-ex">'+exHtml+'</div>'+
-      (w.notes?'<div class="workout-card-notes">"'+w.notes+'"</div>':'')+
-      '<div id="del-confirm-'+w.id+'"></div>'+
-      '<button class="use-as-plan-btn" onclick="copyFromHistory('+w.id+')">+ Use as new plan</button>'+
+      '<div class="workout-card-body">'+
+        '<div class="workout-card-ex">'+exHtml+'</div>'+
+        (w.notes?'<div class="workout-card-notes">"'+w.notes+'"</div>':'')+
+        '<div id="edit-form-'+w.id+'"></div>'+
+        '<div id="del-confirm-'+w.id+'"></div>'+
+        '<button class="use-as-plan-btn" onclick="copyFromHistory('+w.id+')">+ Use as new plan</button>'+
+      '</div>'+
     '</div>';
   }).join("");
 }
 function setFilter(n) { activeFilter=n; renderTimeline(); }
+
+// F3 — edit a completed workout (name, notes only — exercises are read-only)
+function showEditWorkout(id) {
+  var w = gymHistory.find(function(h){ return h.id===id; });
+  if (!w) return;
+  var formEl = document.getElementById("edit-form-"+id);
+  if (!formEl) return;
+  // open the card if not already
+  var card = document.getElementById("hcard-"+id);
+  if (card && !card.classList.contains("open")) card.classList.add("open");
+  formEl.innerHTML =
+    '<div class="edit-workout-form">' +
+      '<div class="field"><label>Workout name</label><input type="text" id="ewname-'+id+'" value="'+w.name.replace(/"/g,"&quot;")+'"/></div>'+
+      '<div class="field"><label>Notes</label><input type="text" id="ewnotes-'+id+'" value="'+(w.notes||"").replace(/"/g,"&quot;")+'" placeholder="optional"/></div>'+
+      '<button class="edit-workout-save" onclick="saveEditWorkout('+id+')">Save changes</button>'+
+      '<button class="edit-workout-cancel" onclick="cancelEditWorkout('+id+')">Cancel</button>'+
+    '</div>';
+}
+function saveEditWorkout(id) {
+  var nameEl = document.getElementById("ewname-"+id);
+  var notesEl = document.getElementById("ewnotes-"+id);
+  if (!nameEl) return;
+  var w = gymHistory.find(function(h){ return h.id===id; });
+  if (!w) return;
+  w.name = toTitleCase(nameEl.value) || w.name;
+  w.notes = notesEl ? notesEl.value.trim() : w.notes;
+  localStorage.setItem("v6history", JSON.stringify(gymHistory));
+  showToast("Workout updated.");
+  populateDateFilters("hist"); renderHistory();
+}
+function cancelEditWorkout(id) {
+  var formEl = document.getElementById("edit-form-"+id);
+  if (formEl) formEl.innerHTML = "";
+}
+
 function deleteHistoryEntry(id) {
   var el=document.getElementById("del-confirm-"+id);
   if (!el) return;
+  var card = document.getElementById("hcard-"+id);
+  if (card && !card.classList.contains("open")) card.classList.add("open");
   el.style.cssText="display:flex;gap:8px;align-items:center;margin:8px 0 4px;";
   el.innerHTML='<span style="font-size:12px;color:var(--muted);flex:1">Delete this entry?</span>'+
     '<button class="start-btn" style="flex:0;padding:6px 12px;font-size:12px;background:#3a0f0f;color:#ef4444;border:1px solid #5a1a1a" onclick="confirmDeleteHistory('+id+')">Yes</button>'+
@@ -965,7 +1059,6 @@ function showClearConfirm() {
 }
 function confirmClearHistory() { gymHistory=[]; localStorage.removeItem("v6history"); populateDateFilters("hist"); renderHistory(); }
 
-// Progress view separates weights and cardio groups
 function renderProgress() {
   var data=getFilteredHistory("hist");
   var el=document.getElementById("history-list");
@@ -985,7 +1078,6 @@ function renderProgress() {
   });
   Object.keys(wMap).forEach(function(k){wMap[k].sort(function(a,b){return new Date(b.date)-new Date(a.date);});});
   Object.keys(cMap).forEach(function(k){cMap[k].sort(function(a,b){return new Date(b.date)-new Date(a.date);});});
-
   var html="";
   Object.keys(wMap).sort().forEach(function(name) {
     var ss=wMap[name];
@@ -1026,8 +1118,6 @@ function renderStats() {
   document.getElementById("stat-reps").textContent=totalReps;
   document.getElementById("stat-cardio-min").textContent=totalCardioMin;
   document.getElementById("stat-cardio-km").textContent=Math.round(totalCardioKm*10)/10;
-
-  // Volume — weights only
   var volMap={};
   data.forEach(function(w){w.exercises.forEach(function(e){
     if (e.type==="cardio") return;
@@ -1038,8 +1128,6 @@ function renderStats() {
   var volEl=document.getElementById("stat-volume");
   if (!volSorted.length) volEl.innerHTML='<p class="empty">No data for this period.</p>';
   else volEl.innerHTML=volSorted.map(function(kv){return '<div class="vol-row"><span class="vol-name">'+kv[0]+'</span><span class="vol-val">'+Math.round(displayWeight(kv[1])).toLocaleString()+' '+unit+'</span></div>';}).join("");
-
-  // Chart exercise selector — weights + cardio, labelled
   var sel=document.getElementById("chart-exercise");
   var prev=sel.value;
   var allNames={};
@@ -1050,8 +1138,6 @@ function renderStats() {
       return '<option value="'+n+'"'+(n===prev?' selected':'')+'>'+label+'</option>';
     }).join("");
   renderChart();
-
-  // PBs — weights only
   var pbs={};
   data.forEach(function(w){w.exercises.forEach(function(e){
     if (e.type==="cardio") return;
@@ -1062,8 +1148,6 @@ function renderStats() {
   var pbArr=Object.keys(pbs).sort().map(function(n){return[n,pbs[n]];});
   if (!pbArr.length) pbEl.innerHTML='<p class="empty">No data for this period.</p>';
   else pbEl.innerHTML=pbArr.map(function(kv){return '<div class="pb-row"><span class="pb-name">'+kv[0]+'</span><span class="pb-val">'+displayWeight(kv[1])+' '+unit+'</span></div>';}).join("");
-
-  // Most trained — all exercise types
   var freq={};
   data.forEach(function(w){w.exercises.forEach(function(e){freq[e.name]=(freq[e.name]||0)+1;});});
   var freqArr=Object.keys(freq).map(function(n){return[n,freq[n]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
@@ -1071,8 +1155,6 @@ function renderStats() {
   if (!freqArr.length) exEl.innerHTML='<p class="empty">No data for this period.</p>';
   else exEl.innerHTML=freqArr.map(function(kv){return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;font-weight:600">'+kv[0]+'</span><span style="font-size:12px;color:var(--muted)">'+kv[1]+' session'+(kv[1]>1?'s':'')+'</span></div>';}).join("");
 }
-
-// Chart: weights = top weight per session; cardio = duration per session
 function renderChart() {
   var sel=document.getElementById("chart-exercise");
   var name=sel?sel.value:"";
@@ -1093,7 +1175,7 @@ function renderChart() {
   sessions.reverse();
   if (!sessions.length) { if(note) note.textContent="No data for "+name+" in this period."; return; }
   var yLabel=isCardio?"min":unit;
-  if (note) note.textContent=(isCardio?"Duration per session":"Top weight per session")+" — "+name;
+  if (note) note.textContent=(isCardio?"Duration per session":"Top weight per session")+" \u2014 "+name;
   var color=isCardio?"#38bdf8":"#f59e0b";
   chartInstance=new Chart(canvas,{
     type:"line",
@@ -1130,8 +1212,8 @@ function importData(input) {
       populateDateFilters("stats"); renderStats();
       populateDateFilters("hist");
       var count=data.gymHistory.length;
-      msg.textContent="Imported "+count+" workout"+(count!==1?"s":"")+" successfully.";
-      msg.style.color="#f59e0b";
+      showToast("Imported "+count+" workout"+(count!==1?"s":"")+".");
+      msg.textContent=""; 
     } catch(err) { msg.textContent="Could not read file."; msg.style.color="#ef4444"; }
     input.value="";
   };
@@ -1140,7 +1222,9 @@ function importData(input) {
 
 updateWorkoutTabStyle();
 refreshSuggestions();
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(function(){}); }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(function(){});
+}
 </script>
 </body>
 </html>
