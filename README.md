@@ -9,12 +9,13 @@ Live at: [your-url.netlify.app](https://your-url.netlify.app)
 ## What it does
 
 - **Plan** reusable workout templates with exercises, sets, reps and weights
+- **Import** a workout block by pasting text from your programme — exercises are parsed automatically
 - **Track** active sessions in real time, then complete or abandon them
 - **Log** both weights and cardio exercises (duration + distance) in the same session
 - **Review** history with a collapsible timeline view and a per-exercise progress view
 - **Analyse** volume, personal bests, most trained exercises and progression charts in Stats
 - **Filter** history and stats by year and month
-- **Reorder** exercises within a plan using up/down controls
+- **Reorder** exercises within a plan by dragging and dropping
 - **Edit** completed workouts from the History tab
 - **Back up** and restore all data via JSON export and import
 
@@ -33,7 +34,8 @@ A single HTML file — no frameworks, no build tools, no backend. All data is st
 
 - Weights and cardio support in the same workout
 - Per-exercise type toggle (Weights / Cardio) when building plans
-- Exercise reordering within a plan (up/down arrows)
+- Paste-to-plan importer — paste a numbered workout block and exercises are parsed automatically
+- Drag and drop to reorder exercises within a plan
 - Auto title-case and fuzzy match warning to prevent duplicate exercise names
 - Exercise library with duplicate detection, quick-select and inline rename
 - Plan copying, editing and one-time use (removed from My Plans on completion)
@@ -43,6 +45,7 @@ A single HTML file — no frameworks, no build tools, no backend. All data is st
 - Collapsible history cards in the Timeline view
 - Edit completed workouts (name and notes) from History
 - Year and month date filters on History and Stats
+- Volume and Personal Bests sections in Stats collapse and expand
 - Progression chart per exercise (top weight or duration per session)
 - Toast notifications throughout — no disruptive alert popups
 - Data export and import via JSON backup file
@@ -74,6 +77,7 @@ Update [what changed]
 
 | Version | Date | Summary |
 |---------|------|---------|
+| v1.3 | Apr 2026 | Paste-to-plan importer, drag-drop reorder, stat accordions, filter pill fix |
 | v1.2 | Apr 2026 | Bug fixes, toasts, collapsible history, exercise reordering, edit completed workouts |
 | v1.1 | Mar 2026 | Cardio support, exercise library, changelog overlay, date filters, data export/import |
 | v1.0 | Mar 2026 | Initial release |

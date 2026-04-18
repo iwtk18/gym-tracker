@@ -46,6 +46,13 @@ h2{font-size:13px;font-weight:700;margin-bottom:.75rem;color:var(--text2);text-t
 input[type=text],input[type=number],textarea,select{width:100%;padding:9px 11px;border:1px solid var(--border2);border-radius:8px;font-size:14px;outline:none;font-family:inherit;background:var(--surface2);color:var(--text);}
 input:focus,textarea:focus,select:focus{border-color:var(--accent);}
 textarea{resize:vertical;}
+.import-toggle-row{margin-bottom:10px;}
+.importer-panel{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:12px;}
+.importer-hint{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5;}
+.importer-textarea{width:100%;padding:9px 11px;border:1px solid var(--border2);border-radius:8px;font-size:12px;font-family:-apple-system,sans-serif;background:var(--bg);color:var(--text);outline:none;resize:vertical;min-height:120px;}
+.importer-textarea:focus{border-color:var(--accent);}
+.importer-btn{width:100%;margin-top:8px;padding:9px 12px;font-size:13px;font-weight:700;background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border);border-radius:8px;cursor:pointer;}
+.importer-btn:hover{background:#3a2900;}
 .ex-type-row{display:flex;margin-bottom:12px;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .ex-type-btn{flex:1;padding:8px;font-size:13px;font-weight:600;background:var(--surface2);border:none;cursor:pointer;color:var(--muted);}
 .ex-type-btn:first-child{border-right:1px solid var(--border);}
@@ -88,6 +95,7 @@ textarea{resize:vertical;}
 .exercises-list{margin:12px 0;display:flex;flex-direction:column;gap:6px;}
 .acc-item{border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .acc-item.cardio-item{border-color:var(--cardio-border);}
+.acc-item.drag-over{border-color:var(--accent);background:var(--accent-dim);}
 .acc-header{display:flex;align-items:center;padding:9px 11px;background:var(--surface2);cursor:pointer;gap:8px;user-select:none;}
 .acc-header:hover{background:#2a2318;}
 .cardio-item .acc-header{background:var(--cardio-dim);}
@@ -98,13 +106,12 @@ textarea{resize:vertical;}
 .cardio-item .ex-summary{color:var(--cardio);opacity:0.8;}
 .acc-chevron{font-size:10px;color:var(--muted);transition:transform 0.2s;flex-shrink:0;}
 .acc-item.open .acc-chevron{transform:rotate(90deg);}
+.drag-handle{font-size:14px;color:var(--muted);cursor:grab;flex-shrink:0;padding:0 2px;touch-action:none;}
+.drag-handle:active{cursor:grabbing;color:var(--accent);}
 .edit-btn{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;flex-shrink:0;margin-right:4px;}
 .edit-btn:hover{background:var(--accent-dim);color:var(--accent);border-color:var(--accent-border);}
 .remove-btn{background:none;border:none;font-size:16px;cursor:pointer;color:var(--muted);flex-shrink:0;padding:0 2px;}
 .remove-btn:hover{color:var(--danger);}
-.reorder-btn{background:none;border:none;font-size:14px;cursor:pointer;color:var(--muted);flex-shrink:0;padding:0 2px;line-height:1;}
-.reorder-btn:hover{color:var(--accent);}
-.reorder-btn:disabled{opacity:0.2;cursor:default;}
 .acc-body{display:none;padding:8px 11px;font-size:12px;color:var(--text2);line-height:1.9;border-top:1px solid var(--border);background:var(--surface);}
 .cardio-item .acc-body{border-top-color:var(--cardio-border);}
 .acc-item.open .acc-body{display:block;}
@@ -179,8 +186,13 @@ textarea{resize:vertical;}
 .view-btn.active{background:var(--accent);color:var(--accent-dark);font-weight:700;}
 .view-btn:first-child{border-right:1px solid var(--border);}
 .filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.filter-pill{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);background:transparent;cursor:pointer;user-select:none;}
+.filter-pill{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);background:var(--surface2);cursor:pointer;user-select:none;display:inline-block;}
 .filter-pill.active{background:var(--accent-dim);color:var(--accent);border-color:var(--accent-border);}
+.stat-section-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:4px;}
+.stat-section-header:hover h2{color:var(--accent);}
+.stat-chevron{font-size:10px;color:var(--muted);transition:transform 0.2s;}
+.stat-chevron.open{transform:rotate(90deg);}
+.stat-section-body{margin-top:8px;}
 .prog-group{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:10px;}
 .prog-group-name{font-size:14px;font-weight:700;margin-bottom:4px;}
 .prog-group-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
@@ -232,12 +244,22 @@ textarea{resize:vertical;}
     </div>
     <div class="changelog-body">
       <div class="cl-version">
+        <div class="cl-ver-header"><span class="cl-ver-num">v1.3</span><span class="cl-ver-date">Apr 2026</span></div>
+        <div class="cl-ver-label">Importer, drag-drop, accordions</div>
+        <ul class="cl-list">
+          <li>Fixed: history filter pills now tappable</li>
+          <li>Paste-to-plan importer — paste a workout block from your programme and it builds the plan automatically</li>
+          <li>Drag and drop to reorder exercises in a plan</li>
+          <li>Volume and Personal Bests in Stats now collapse and expand</li>
+        </ul>
+      </div>
+      <div class="cl-version">
         <div class="cl-ver-header"><span class="cl-ver-num">v1.2</span><span class="cl-ver-date">Apr 2026</span></div>
         <div class="cl-ver-label">Polish and fixes</div>
         <ul class="cl-list">
           <li>Fixed: app updates now reliably reach iPhone after a deploy</li>
           <li>Fixed: changelog close button no longer hidden behind iPhone status bar</li>
-          <li>Fixed: active Workout tab now readable (was amber text on amber background)</li>
+          <li>Fixed: active Workout tab now readable</li>
           <li>Fixed: workout number no longer shifts if a history entry is deleted mid-session</li>
           <li>Fixed: editing a plan no longer deletes it before you save</li>
           <li>Toasts replace alert() popups throughout the app</li>
@@ -263,14 +285,6 @@ textarea{resize:vertical;}
           <li>Plan &rarr; train &rarr; complete workflow with reusable plans</li>
           <li>5 tabs: Plan, My Plans, Workout, History, Stats</li>
           <li>kg / lbs unit toggle throughout</li>
-          <li>Exercise accordion with sets, reps and weight builder</li>
-          <li>Plan numbering, editing, copying and one-time-use on completion</li>
-          <li>Global workout numbering (#1, #2, #3&hellip;)</li>
-          <li>Abandoning a workout restores the plan to My Plans</li>
-          <li>History: Timeline and Progress views with workout name filters</li>
-          <li>Year and month date filters on History and Stats</li>
-          <li>Stats: volume, progression chart, personal bests, most trained</li>
-          <li>Typo protection: auto title-case, fuzzy match warning on entry</li>
           <li>Exercise library with duplicate detection, inline rename and quick-select</li>
           <li>Data export and import via JSON backup file</li>
           <li>Ember dark theme</li>
@@ -279,13 +293,12 @@ textarea{resize:vertical;}
     </div>
   </div>
 
-  <!-- Toast notification (U1) -->
   <div id="toast" class="toast"></div>
 
   <div class="top-row">
     <h1>Gym Tracker</h1>
     <div style="display:flex;align-items:center;gap:10px">
-      <button class="version-badge" onclick="toggleChangelog()">v1.2</button>
+      <button class="version-badge" onclick="toggleChangelog()">v1.3</button>
       <div class="unit-seg">
         <button id="btn-kg" class="unit-opt active" onclick="setUnit('kg')">kg</button>
         <button id="btn-lbs" class="unit-opt" onclick="setUnit('lbs')">lbs</button>
@@ -307,7 +320,18 @@ textarea{resize:vertical;}
       <h2>Build a plan</h2>
       <div class="field"><label>Plan name</label><input type="text" id="plan-name" placeholder="e.g. Push day"/></div>
       <div class="field"><label>Notes (optional)</label><textarea id="plan-notes" rows="2" placeholder="e.g. Focus on chest"></textarea></div>
-      <div class="field">
+
+      <!-- Paste importer (F5) -->
+      <div class="import-toggle-row">
+        <button class="library-toggle-btn" onclick="toggleImporter()"><span id="importer-toggle-label">Import from text</span></button>
+      </div>
+      <div id="importer-panel" class="importer-panel" style="display:none">
+        <p class="importer-hint">Paste a workout block from your programme. Each numbered exercise line will be parsed automatically.</p>
+        <textarea id="importer-text" class="importer-textarea" rows="8" placeholder="1. Back squat: 1x8 bar, 5x5 80kg&#10;2. Barbell RDL: 4x8 75kg&#10;3. Cardio: 25 min Z2"></textarea>
+        <button class="importer-btn" onclick="runImporter()">Parse exercises</button>
+      </div>
+
+      <div class="field" style="margin-top:12px">
         <label>Exercise name</label>
         <input type="text" id="ex-name" placeholder="e.g. Bench Press" list="ex-suggestions" autocomplete="off"/>
         <datalist id="ex-suggestions"></datalist>
@@ -381,9 +405,14 @@ textarea{resize:vertical;}
       <div class="stat"><div class="stat-label">Cardio (km)</div><div class="stat-val" id="stat-cardio-km">0</div></div>
     </div>
     <div class="card">
-      <h2>Volume per exercise</h2>
-      <p class="stat-note">Total kg lifted (sets x reps x weight) — weights exercises only</p>
-      <div id="stat-volume"><p class="empty">Complete workouts to see volume.</p></div>
+      <div class="stat-section-header" onclick="toggleStatSection('volume')">
+        <h2 style="margin:0">Volume per exercise</h2>
+        <span class="stat-chevron" id="chevron-volume">&#9654;</span>
+      </div>
+      <p class="stat-note" style="margin-top:4px">Total kg lifted (sets x reps x weight) — weights only</p>
+      <div id="stat-volume-body" class="stat-section-body" style="display:none">
+        <div id="stat-volume"><p class="empty">Complete workouts to see volume.</p></div>
+      </div>
     </div>
     <div class="card">
       <h2>Progression chart</h2>
@@ -394,8 +423,13 @@ textarea{resize:vertical;}
       <p class="stat-note" id="chart-note" style="margin-top:6px"></p>
     </div>
     <div class="card">
-      <h2>Personal bests</h2>
-      <div id="stat-pbs"><p class="empty">Complete workouts to see personal bests.</p></div>
+      <div class="stat-section-header" onclick="toggleStatSection('pbs')">
+        <h2 style="margin:0">Personal bests</h2>
+        <span class="stat-chevron" id="chevron-pbs">&#9654;</span>
+      </div>
+      <div id="stat-pbs-body" class="stat-section-body" style="display:none">
+        <div id="stat-pbs"><p class="empty">Complete workouts to see personal bests.</p></div>
+      </div>
     </div>
     <div class="card">
       <h2>Most trained</h2>
@@ -431,8 +465,9 @@ var activeWorkout = JSON.parse(localStorage.getItem("v6active") || "null");
 var gymHistory = JSON.parse(localStorage.getItem("v6history") || "[]");
 var currentSets = [], exercises = [];
 var currentExType = "weights";
+var editingPlanId = null;
 
-// ── TOAST (U1) ────────────────────────────────────────────────────────────────
+// ── TOAST ─────────────────────────────────────────────────────────────────────
 var toastTimer = null;
 function showToast(msg, isError) {
   var el = document.getElementById("toast");
@@ -441,6 +476,16 @@ function showToast(msg, isError) {
   el.textContent = msg;
   el.className = "toast" + (isError ? " error" : "") + " show";
   toastTimer = setTimeout(function() { el.className = "toast"; }, 2800);
+}
+
+// ── STAT SECTION ACCORDIONS (U6) ──────────────────────────────────────────────
+function toggleStatSection(id) {
+  var body = document.getElementById("stat-" + id + "-body");
+  var chevron = document.getElementById("chevron-" + id);
+  if (!body) return;
+  var open = body.style.display === "block";
+  body.style.display = open ? "none" : "block";
+  if (chevron) chevron.classList.toggle("open", !open);
 }
 
 // ── EXERCISE TYPE TOGGLE ──────────────────────────────────────────────────────
@@ -500,7 +545,98 @@ function refreshSuggestions() {
   }).join("");
 }
 
-// ── CHANGELOG (B4 fixed — header respects safe area) ─────────────────────────
+// ── PASTE-TO-PLAN IMPORTER (F5) ───────────────────────────────────────────────
+// Parses workout blocks from the markdown programme format.
+// Handles patterns like:
+//   "Back squat: 1x8 bar, 5x5 80kg"  → weights exercise with multiple set groups
+//   "Cardio: 25 min Z2"               → cardio exercise
+//   "Sled push: 6 x 20m 80kg"         → weights (treated as distance note in name)
+var importerOpen = false;
+function toggleImporter() {
+  importerOpen = !importerOpen;
+  var panel = document.getElementById("importer-panel");
+  var label = document.getElementById("importer-toggle-label");
+  if (!panel) return;
+  panel.style.display = importerOpen ? "block" : "none";
+  if (label) label.textContent = importerOpen ? "Hide importer" : "Import from text";
+}
+
+function runImporter() {
+  var raw = document.getElementById("importer-text").value;
+  if (!raw.trim()) { showToast("Paste some workout text first.", true); return; }
+  var lines = raw.split("\n");
+  var parsed = [];
+  lines.forEach(function(line) {
+    line = line.trim();
+    // Must start with a number and dot/period (numbered list item)
+    if (!/^\d+\./.test(line)) return;
+    // Strip the leading number
+    var content = line.replace(/^\d+\.\s*/, "").trim();
+    if (!content) return;
+    // Split on first colon to get name and details
+    var colonIdx = content.indexOf(":");
+    if (colonIdx === -1) return;
+    var rawName = content.substring(0, colonIdx).trim();
+    var details = content.substring(colonIdx + 1).trim();
+    var name = toTitleCase(rawName);
+    // Detect cardio: "25 min" pattern in details or name contains cardio keywords
+    var cardioMatch = details.match(/(\d+)\s*min/i);
+    var isCardio = !!cardioMatch || /cardio|z2|z3|row|cycle|bike|run|walk|swim/i.test(rawName);
+    if (isCardio) {
+      var dur = cardioMatch ? parseInt(cardioMatch[1]) : 30;
+      // Try to find distance e.g. "5km" or "5 km"
+      var distMatch = details.match(/(\d+\.?\d*)\s*km/i);
+      var dist = distMatch ? parseFloat(distMatch[1]) : 0;
+      parsed.push({ name: name, type: "cardio", duration: dur, distance: dist, open: false });
+      return;
+    }
+    // Weights: parse all set groups like "5x5 80kg", "1x8 bar", "3x12"
+    // Find the working sets — last set group with an actual weight, or all groups
+    var setGroups = [];
+    var groupPattern = /(\d+)\s*[xX×]\s*(\d+)[^\d,]*?([\d.]+)\s*kg/g;
+    var m;
+    while ((m = groupPattern.exec(details)) !== null) {
+      var sets = parseInt(m[1]);
+      var reps = parseInt(m[2]);
+      var weightKg = parseFloat(m[3]);
+      for (var s = 0; s < sets; s++) {
+        setGroups.push({ reps: reps, weightKg: weightKg });
+      }
+    }
+    // If no weighted sets found, try bodyweight pattern e.g. "3x8 bodyweight" or "3 x AMRAP"
+    if (!setGroups.length) {
+      var bwPattern = /(\d+)\s*[xX×]\s*(\d+|AMRAP)/i;
+      var bwMatch = details.match(bwPattern);
+      if (bwMatch) {
+        var bwSets = parseInt(bwMatch[1]);
+        var bwReps = isNaN(parseInt(bwMatch[2])) ? 10 : parseInt(bwMatch[2]);
+        for (var bs = 0; bs < bwSets; bs++) {
+          setGroups.push({ reps: bwReps, weightKg: 0 });
+        }
+      }
+    }
+    if (setGroups.length) {
+      parsed.push({ name: name, type: "weights", sets: setGroups, open: false });
+    }
+  });
+  if (!parsed.length) {
+    showToast("No exercises found. Check the format.", true);
+    return;
+  }
+  // Merge parsed exercises into the existing list
+  parsed.forEach(function(e) { exercises.push(e); });
+  renderExercises();
+  // Clear and close
+  document.getElementById("importer-text").value = "";
+  importerOpen = false;
+  var panel = document.getElementById("importer-panel");
+  if (panel) panel.style.display = "none";
+  var label = document.getElementById("importer-toggle-label");
+  if (label) label.textContent = "Import from text";
+  showToast("Added " + parsed.length + " exercise" + (parsed.length !== 1 ? "s" : "") + ".");
+}
+
+// ── CHANGELOG ────────────────────────────────────────────────────────────────
 function toggleChangelog() {
   var el = document.getElementById("changelog-overlay");
   if (el) el.style.display = el.style.display === "none" ? "flex" : "none";
@@ -652,14 +788,15 @@ function showTab(tab, el) {
     libraryOpen=false;
     var p=document.getElementById("library-panel"); if(p) p.style.display="none";
     var l=document.getElementById("library-toggle-label"); if(l) l.textContent="Browse library";
+    importerOpen=false;
+    var ip=document.getElementById("importer-panel"); if(ip) ip.style.display="none";
+    var il=document.getElementById("importer-toggle-label"); if(il) il.textContent="Import from text";
   }
   if (tab==="plans")   renderPlans();
   if (tab==="workout") renderWorkoutView();
   if (tab==="history") { populateDateFilters("hist"); renderHistory(); }
   if (tab==="stats")   { populateDateFilters("stats"); renderStats(); }
 }
-
-// B3 fix: live Workout tab uses --text colour, not amber-on-amber
 function updateWorkoutTabStyle() {
   var btn = document.getElementById("tab-workout-btn");
   if (activeWorkout) btn.classList.add("live"); else btn.classList.remove("live");
@@ -733,14 +870,6 @@ function editExercise(i) {
   document.getElementById("ex-name").focus();
 }
 
-// F2 — move exercise up or down in the list
-function moveExercise(i, dir) {
-  var j = i + dir;
-  if (j < 0 || j >= exercises.length) return;
-  var tmp = exercises[i]; exercises[i] = exercises[j]; exercises[j] = tmp;
-  renderExercises();
-}
-
 function exSummary(e) {
   if (e.type==="cardio") {
     var s = e.duration + " min";
@@ -755,6 +884,84 @@ function exSummary(e) {
   var wl=ws.length===0?"bodyweight":mn===mx?displayWeight(mn)+unit:displayWeight(mn)+"-"+displayWeight(mx)+unit;
   return tot+" set"+(tot>1?"s":"")+" \u00b7 "+wl;
 }
+
+// ── DRAG AND DROP REORDER (U5) ────────────────────────────────────────────────
+var dragSrcIdx = null;
+function onDragStart(e, i) {
+  dragSrcIdx = i;
+  e.dataTransfer.effectAllowed = "move";
+}
+function onDragOver(e, i) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  var items = document.querySelectorAll(".acc-item");
+  items.forEach(function(el) { el.classList.remove("drag-over"); });
+  if (items[i]) items[i].classList.add("drag-over");
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove("drag-over");
+}
+function onDrop(e, i) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === i) { dragSrcIdx=null; return; }
+  var moved = exercises.splice(dragSrcIdx, 1)[0];
+  exercises.splice(i, 0, moved);
+  dragSrcIdx = null;
+  renderExercises();
+}
+function onDragEnd() {
+  dragSrcIdx = null;
+  document.querySelectorAll(".acc-item").forEach(function(el) { el.classList.remove("drag-over"); });
+}
+
+// Touch drag support for iPhone
+var touchDragIdx = null, touchClone = null, touchScrollY = 0;
+function onTouchStart(e, i) {
+  touchDragIdx = i;
+  touchScrollY = window.scrollY;
+  var el = e.currentTarget.closest(".acc-item");
+  touchClone = el.cloneNode(true);
+  touchClone.style.cssText = "position:fixed;opacity:0.85;pointer-events:none;z-index:300;width:" + el.offsetWidth + "px;background:var(--surface2);border:1px solid var(--accent);border-radius:8px;";
+  var rect = el.getBoundingClientRect();
+  touchClone.style.top = rect.top + "px";
+  touchClone.style.left = rect.left + "px";
+  document.body.appendChild(touchClone);
+}
+function onTouchMove(e) {
+  if (touchDragIdx === null || !touchClone) return;
+  e.preventDefault();
+  var t = e.touches[0];
+  touchClone.style.top = (t.clientY - 30) + "px";
+  touchClone.style.left = touchClone.style.left;
+  // Find which item we're over
+  var items = document.querySelectorAll(".acc-item");
+  items.forEach(function(el) { el.classList.remove("drag-over"); });
+  items.forEach(function(el, idx) {
+    var rect = el.getBoundingClientRect();
+    if (t.clientY >= rect.top && t.clientY <= rect.bottom) {
+      el.classList.add("drag-over");
+    }
+  });
+}
+function onTouchEnd(e) {
+  if (touchDragIdx === null) return;
+  if (touchClone) { document.body.removeChild(touchClone); touchClone = null; }
+  var items = document.querySelectorAll(".acc-item");
+  var targetIdx = null;
+  var t = e.changedTouches[0];
+  items.forEach(function(el, idx) {
+    var rect = el.getBoundingClientRect();
+    if (t.clientY >= rect.top && t.clientY <= rect.bottom) targetIdx = idx;
+    el.classList.remove("drag-over");
+  });
+  if (targetIdx !== null && targetIdx !== touchDragIdx) {
+    var moved = exercises.splice(touchDragIdx, 1)[0];
+    exercises.splice(targetIdx, 0, moved);
+    renderExercises();
+  }
+  touchDragIdx = null;
+}
+
 function renderExercises() {
   var el=document.getElementById("exercises-list");
   if (!exercises.length) { el.innerHTML='<p class="empty">No exercises added yet.</p>'; return; }
@@ -763,12 +970,11 @@ function renderExercises() {
     var body = isCardio
       ? '<div class="cardio-detail-row"><div class="cardio-detail-item"><div class="cardio-detail-label">Duration</div><div class="cardio-detail-val">'+e.duration+' min</div></div>'+(e.distance&&e.distance>0?'<div class="cardio-detail-item"><div class="cardio-detail-label">Distance</div><div class="cardio-detail-val">'+e.distance+' km</div></div>':'')+'</div>'
       : (e.sets||[]).map(function(s,si){return "Set "+(si+1)+": "+s.reps+" reps"+(s.weightKg?" @ "+displayWeight(s.weightKg)+" "+unit:"");}).join("<br>");
-    return '<div class="acc-item'+(e.open?" open":"")+(isCardio?" cardio-item":"")+'">'+
+    return '<div class="acc-item'+(e.open?" open":"")+(isCardio?" cardio-item":"")+'" draggable="true" ondragstart="onDragStart(event,'+i+')" ondragover="onDragOver(event,'+i+')" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'+i+')" ondragend="onDragEnd()">'+
       '<div class="acc-header" onclick="toggleExercise('+i+')">'+
+        '<span class="drag-handle" ontouchstart="onTouchStart(event,'+i+')" ontouchmove="onTouchMove(event)" ontouchend="onTouchEnd(event)">&#8597;</span>'+
         '<div class="acc-left"><div class="ex-name">'+e.name+'</div><div class="ex-summary">'+exSummary(e)+'</div></div>'+
         '<span class="acc-chevron">&#9654;</span>'+
-        '<button class="reorder-btn" onclick="event.stopPropagation();moveExercise('+i+',-1)" '+(i===0?'disabled':'')+' title="Move up">&#8593;</button>'+
-        '<button class="reorder-btn" onclick="event.stopPropagation();moveExercise('+i+',1)" '+(i===exercises.length-1?'disabled':'')+' title="Move down">&#8595;</button>'+
         '<button class="edit-btn" onclick="event.stopPropagation();editExercise('+i+')">edit</button>'+
         '<button class="remove-btn" onclick="event.stopPropagation();removeExercise('+i+')">&#215;</button>'+
       '</div>'+
@@ -782,9 +988,7 @@ function savePlan() {
   var name=document.getElementById("plan-name").value.trim()||"Workout";
   var notes=document.getElementById("plan-notes").value.trim();
   if (!exercises.length) { showToast("Add at least one exercise first.", true); return; }
-  // U2 fix: if we're editing an existing plan (editingPlanId is set),
-  // remove the old version now — after we've validated the new one
-  if (typeof editingPlanId !== "undefined" && editingPlanId !== null) {
+  if (editingPlanId !== null) {
     plans = plans.filter(function(p){ return p.id !== editingPlanId; });
     editingPlanId = null;
   }
@@ -796,9 +1000,6 @@ function savePlan() {
   renderExercises(); refreshSuggestions();
   showToast("Plan saved!");
 }
-
-var editingPlanId = null;
-
 function loadPlanIntoForm(planObj) {
   exercises=JSON.parse(JSON.stringify(planObj.exercises)).map(function(e){return Object.assign({},e,{open:false});});
   document.getElementById("plan-name").value=planObj.name||"";
@@ -810,23 +1011,21 @@ function loadPlanIntoForm(planObj) {
   document.querySelector(".tab").classList.add("active");
   document.getElementById("tab-plan").classList.add("active");
 }
-
-// U2 fix: editPlan no longer deletes the plan — it stays in place
-// until savePlan() runs successfully and removes it
 function editPlan(id) {
   var plan=plans.find(function(p){return p.id===id;});
   if (!plan) return;
   editingPlanId = id;
   loadPlanIntoForm(plan);
 }
-
 function copyPlanFromObject(planObj) {
   var copy={id:Date.now(),name:planObj.name+" (copy)",notes:planObj.notes||"",exercises:JSON.parse(JSON.stringify(planObj.exercises)),createdAt:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})};
   plans.unshift(copy); localStorage.setItem("v6plans",JSON.stringify(plans)); renderPlans();
 }
 function copyPlan(id) { var p=plans.find(function(p){return p.id===id;}); if(p) copyPlanFromObject(p); }
-function copyFromHistory(id) { var w=gymHistory.find(function(h){return h.id===id;}); if(w) { editingPlanId=null; loadPlanIntoForm({name:w.name,notes:w.notes||"",exercises:w.exercises}); } }
-
+function copyFromHistory(id) {
+  var w=gymHistory.find(function(h){return h.id===id;});
+  if(w) { editingPlanId=null; loadPlanIntoForm({name:w.name,notes:w.notes||"",exercises:w.exercises}); }
+}
 function renderPlans() {
   var el=document.getElementById("plans-list");
   if (!plans.length) { el.innerHTML='<p class="empty">No plans yet. Create one in the Plan tab.</p>'; return; }
@@ -868,7 +1067,6 @@ function confirmDeletePlan(id) {
 function startWorkout(planId) {
   var plan=plans.find(function(p){return p.id===planId;});
   if (!plan) return;
-  // B2 fix: lock workout number at start time, not recalculated live
   var lockedNum = gymHistory.length + 1;
   activeWorkout={planId:plan.id,name:plan.name,notes:plan.notes,exercises:JSON.parse(JSON.stringify(plan.exercises)),startedAt:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),planSnapshot:JSON.parse(JSON.stringify(plan)),lockedWorkoutNum:lockedNum};
   localStorage.setItem("v6active",JSON.stringify(activeWorkout));
@@ -947,18 +1145,16 @@ function setHistoryView(view) {
   renderHistory();
 }
 function renderHistory() { if (historyView==="timeline") renderTimeline(); else renderProgress(); }
-
-// U3 — history cards are collapsible; toggle open/closed on header tap
 function toggleHistoryCard(id) {
   var card = document.getElementById("hcard-"+id);
   if (card) card.classList.toggle("open");
 }
-
 function renderTimeline() {
   var data=getFilteredHistory("hist");
   var names=["All"].concat(data.map(function(w){return w.name;}).filter(function(v,i,a){return a.indexOf(v)===i;}));
+  // B5 fix: pills are now proper clickable buttons, not divs
   document.getElementById("filter-pills").innerHTML=names.map(function(n) {
-    return '<div class="filter-pill'+(n===activeFilter?" active":"")+'" onclick="setFilter('+JSON.stringify(n)+')">'+n+'</div>';
+    return '<button class="filter-pill'+(n===activeFilter?" active":"")+'" onclick="setFilter('+JSON.stringify(n)+')">'+n+'</button>';
   }).join("");
   var clearRow=document.getElementById("history-clear-row");
   if (gymHistory.length) {
@@ -999,14 +1195,11 @@ function renderTimeline() {
   }).join("");
 }
 function setFilter(n) { activeFilter=n; renderTimeline(); }
-
-// F3 — edit a completed workout (name, notes only — exercises are read-only)
 function showEditWorkout(id) {
   var w = gymHistory.find(function(h){ return h.id===id; });
   if (!w) return;
   var formEl = document.getElementById("edit-form-"+id);
   if (!formEl) return;
-  // open the card if not already
   var card = document.getElementById("hcard-"+id);
   if (card && !card.classList.contains("open")) card.classList.add("open");
   formEl.innerHTML =
@@ -1033,7 +1226,6 @@ function cancelEditWorkout(id) {
   var formEl = document.getElementById("edit-form-"+id);
   if (formEl) formEl.innerHTML = "";
 }
-
 function deleteHistoryEntry(id) {
   var el=document.getElementById("del-confirm-"+id);
   if (!el) return;
@@ -1058,7 +1250,6 @@ function showClearConfirm() {
     '<button class="abandon-btn" style="padding:6px 12px;font-size:12px" onclick="renderTimeline()">Cancel</button>';
 }
 function confirmClearHistory() { gymHistory=[]; localStorage.removeItem("v6history"); populateDateFilters("hist"); renderHistory(); }
-
 function renderProgress() {
   var data=getFilteredHistory("hist");
   var el=document.getElementById("history-list");
@@ -1213,7 +1404,7 @@ function importData(input) {
       populateDateFilters("hist");
       var count=data.gymHistory.length;
       showToast("Imported "+count+" workout"+(count!==1?"s":"")+".");
-      msg.textContent=""; 
+      msg.textContent="";
     } catch(err) { msg.textContent="Could not read file."; msg.style.color="#ef4444"; }
     input.value="";
   };
