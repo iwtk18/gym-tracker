@@ -87,6 +87,8 @@ textarea{resize:vertical;}
 .set-add-btn:hover{background:#3a2900;}
 .set-chips{margin-top:8px;display:flex;flex-direction:column;gap:4px;}
 .set-chip{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--text2);}
+.set-chip-move{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:0 3px;line-height:1;}
+.set-chip-move:hover{color:var(--accent);}
 .set-chip-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;}
 .add-btn{width:100%;padding:9px;font-size:14px;font-weight:700;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;cursor:pointer;margin-top:4px;color:var(--text2);}
 .add-btn:hover{border-color:var(--accent);color:var(--accent);}
@@ -185,9 +187,7 @@ textarea{resize:vertical;}
 .view-btn{flex:1;padding:8px;font-size:13px;font-weight:600;background:var(--surface);border:none;cursor:pointer;color:var(--muted);}
 .view-btn.active{background:var(--accent);color:var(--accent-dark);font-weight:700;}
 .view-btn:first-child{border-right:1px solid var(--border);}
-.filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.filter-pill{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);background:var(--surface2);cursor:pointer;user-select:none;display:inline-block;}
-.filter-pill.active{background:var(--accent-dim);color:var(--accent);border-color:var(--accent-border);}
+.hist-sticky-header{position:sticky;top:0;z-index:10;background:var(--bg);padding-bottom:4px;}
 .stat-section-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:4px;}
 .stat-section-header:hover h2{color:var(--accent);}
 .stat-chevron{font-size:10px;color:var(--muted);transition:transform 0.2s;}
@@ -244,6 +244,16 @@ textarea{resize:vertical;}
     </div>
     <div class="changelog-body">
       <div class="cl-version">
+        <div class="cl-ver-header"><span class="cl-ver-num">v1.4</span><span class="cl-ver-date">Jul 2026</span></div>
+        <div class="cl-ver-label">Numbering fix, filters, set reorder</div>
+        <ul class="cl-list">
+          <li>Fixed: deleting a history entry no longer leaves numbering gaps or duplicates</li>
+          <li>History filter pills replaced with a dropdown that stays visible when scrolling</li>
+          <li>History filter bar and view toggle now stick to the top when scrolling</li>
+          <li>Sets can be reordered up and down within the plan builder</li>
+        </ul>
+      </div>
+      <div class="cl-version">
         <div class="cl-ver-header"><span class="cl-ver-num">v1.3</span><span class="cl-ver-date">Apr 2026</span></div>
         <div class="cl-ver-label">Importer, drag-drop, accordions</div>
         <ul class="cl-list">
@@ -298,7 +308,7 @@ textarea{resize:vertical;}
   <div class="top-row">
     <h1>Gym Tracker</h1>
     <div style="display:flex;align-items:center;gap:10px">
-      <button class="version-badge" onclick="toggleChangelog()">v1.3</button>
+      <button class="version-badge" onclick="toggleChangelog()">v1.4</button>
       <div class="unit-seg">
         <button id="btn-kg" class="unit-opt active" onclick="setUnit('kg')">kg</button>
         <button id="btn-lbs" class="unit-opt" onclick="setUnit('lbs')">lbs</button>
@@ -378,15 +388,19 @@ textarea{resize:vertical;}
   </div>
 
   <div id="tab-history" class="section">
-    <div class="date-filter-bar">
-      <select id="hist-year" onchange="renderHistory()"><option value="">All years</option></select>
-      <select id="hist-month" onchange="renderHistory()"><option value="">All months</option></select>
+    <div class="hist-sticky-header">
+      <div class="date-filter-bar">
+        <select id="hist-year" onchange="renderHistory()"><option value="">All years</option></select>
+        <select id="hist-month" onchange="renderHistory()"><option value="">All months</option></select>
+      </div>
+      <div class="date-filter-bar" id="hist-filter-bar">
+        <select id="hist-filter" onchange="renderHistory()"><option value="">All workouts</option></select>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-timeline" onclick="setHistoryView('timeline')">Timeline</button>
+        <button class="view-btn" id="btn-progress" onclick="setHistoryView('progress')">Progress</button>
+      </div>
     </div>
-    <div class="view-toggle">
-      <button class="view-btn active" id="btn-timeline" onclick="setHistoryView('timeline')">Timeline</button>
-      <button class="view-btn" id="btn-progress" onclick="setHistoryView('progress')">Progress</button>
-    </div>
-    <div class="filter-pills" id="filter-pills"></div>
     <div id="history-clear-row" style="display:none;margin-bottom:12px;"></div>
     <div id="history-list"></div>
   </div>
@@ -819,11 +833,20 @@ function renderSetChips() {
   var el=document.getElementById("set-chips");
   if (!el) return;
   if (!currentSets.length) { el.innerHTML=""; return; }
+  var len=currentSets.length;
   el.innerHTML=currentSets.map(function(s,i) {
-    return '<div class="set-chip"><span>Set '+(i+1)+': '+s.reps+' reps'+(s.weightKg?' @ '+displayWeight(s.weightKg)+' '+unit:'')+'</span><button class="set-chip-remove" onclick="removeSet('+i+')">x</button></div>';
+    var upBtn=i>0?'<button class="set-chip-move" onclick="moveSet('+i+',-1)">&#9650;</button>':'';
+    var dnBtn=i<len-1?'<button class="set-chip-move" onclick="moveSet('+i+',1)">&#9660;</button>':'';
+    return '<div class="set-chip"><span>Set '+(i+1)+': '+s.reps+' reps'+(s.weightKg?' @ '+displayWeight(s.weightKg)+' '+unit:'')+'</span><span style="display:flex;align-items:center;gap:2px">'+upBtn+dnBtn+'<button class="set-chip-remove" onclick="removeSet('+i+')">x</button></span></div>';
   }).join("");
 }
 function removeSet(i) { currentSets.splice(i,1); renderSetChips(); }
+function moveSet(i,dir) {
+  var j=i+dir;
+  if(j<0||j>=currentSets.length) return;
+  var tmp=currentSets[i]; currentSets[i]=currentSets[j]; currentSets[j]=tmp;
+  renderSetChips();
+}
 
 // ── EXERCISE BUILDER ──────────────────────────────────────────────────────────
 function addExercise() {
@@ -1136,12 +1159,13 @@ function abandonWorkout() {
 }
 
 // ── HISTORY ───────────────────────────────────────────────────────────────────
-var historyView="timeline", activeFilter="All";
+var historyView="timeline";
 function setHistoryView(view) {
   historyView=view;
   document.getElementById("btn-timeline").classList.toggle("active",view==="timeline");
   document.getElementById("btn-progress").classList.toggle("active",view==="progress");
-  document.getElementById("filter-pills").style.display=view==="timeline"?"flex":"none";
+  var fb=document.getElementById("hist-filter-bar");
+  if(fb) fb.style.display=view==="timeline"?"flex":"none";
   renderHistory();
 }
 function renderHistory() { if (historyView==="timeline") renderTimeline(); else renderProgress(); }
@@ -1151,17 +1175,22 @@ function toggleHistoryCard(id) {
 }
 function renderTimeline() {
   var data=getFilteredHistory("hist");
-  var names=["All"].concat(data.map(function(w){return w.name;}).filter(function(v,i,a){return a.indexOf(v)===i;}));
-  // B5 fix: pills are now proper clickable buttons, not divs
-  document.getElementById("filter-pills").innerHTML=names.map(function(n) {
-    return '<button class="filter-pill'+(n===activeFilter?" active":"")+'" onclick="setFilter('+JSON.stringify(n)+')">'+n+'</button>';
-  }).join("");
+  // U9: populate workout name filter dropdown
+  var filterSel=document.getElementById("hist-filter");
+  if (filterSel) {
+    var prevFilter=filterSel.value;
+    var names=data.map(function(w){return w.name;}).filter(function(v,i,a){return a.indexOf(v)===i;}).sort();
+    filterSel.innerHTML='<option value="">All workouts</option>'+names.map(function(n){
+      return '<option value="'+n.replace(/"/g,"&quot;")+'"'+(n===prevFilter?' selected':'')+'>'+n+'</option>';
+    }).join("");
+  }
+  var activeFilter=filterSel?filterSel.value:"";
   var clearRow=document.getElementById("history-clear-row");
   if (gymHistory.length) {
     clearRow.style.display="block";
     clearRow.innerHTML='<div id="clear-confirm"></div><button class="history-clear-btn" onclick="showClearConfirm()">Clear all history</button>';
   } else { clearRow.style.display="none"; }
-  var filtered=activeFilter==="All"?data:data.filter(function(w){return w.name===activeFilter;});
+  var filtered=(!activeFilter)?data:data.filter(function(w){return w.name===activeFilter;});
   var el=document.getElementById("history-list");
   if (!filtered.length) { el.innerHTML='<p class="empty" style="padding:1rem 0">No workouts found for this period.</p>'; return; }
   el.innerHTML=filtered.map(function(w) {
@@ -1194,7 +1223,7 @@ function renderTimeline() {
     '</div>';
   }).join("");
 }
-function setFilter(n) { activeFilter=n; renderTimeline(); }
+// setFilter removed in v1.4 — filter pills replaced by dropdown (U9)
 function showEditWorkout(id) {
   var w = gymHistory.find(function(h){ return h.id===id; });
   if (!w) return;
@@ -1236,9 +1265,16 @@ function deleteHistoryEntry(id) {
     '<button class="start-btn" style="flex:0;padding:6px 12px;font-size:12px;background:#3a0f0f;color:#ef4444;border:1px solid #5a1a1a" onclick="confirmDeleteHistory('+id+')">Yes</button>'+
     '<button class="abandon-btn" style="padding:6px 12px;font-size:12px" onclick="this.parentElement.innerHTML=\'\'">Cancel</button>';
 }
+function renumberHistory() {
+  var total = gymHistory.length;
+  for (var i = 0; i < total; i++) {
+    gymHistory[i].workoutNumber = total - i;
+  }
+  localStorage.setItem("v6history", JSON.stringify(gymHistory));
+}
 function confirmDeleteHistory(id) {
   gymHistory=gymHistory.filter(function(w){return w.id!==id;});
-  localStorage.setItem("v6history",JSON.stringify(gymHistory));
+  renumberHistory();
   populateDateFilters("hist"); renderHistory();
 }
 function showClearConfirm() {
@@ -1250,6 +1286,8 @@ function showClearConfirm() {
     '<button class="abandon-btn" style="padding:6px 12px;font-size:12px" onclick="renderTimeline()">Cancel</button>';
 }
 function confirmClearHistory() { gymHistory=[]; localStorage.removeItem("v6history"); populateDateFilters("hist"); renderHistory(); }
+// B6: Also renumber on import to fix any pre-existing gaps
+
 function renderProgress() {
   var data=getFilteredHistory("hist");
   var el=document.getElementById("history-list");
@@ -1399,6 +1437,7 @@ function importData(input) {
       if (data.activeWorkout) localStorage.setItem("v6active",JSON.stringify(data.activeWorkout));
       else localStorage.removeItem("v6active");
       plans=data.plans; gymHistory=data.gymHistory; activeWorkout=data.activeWorkout||null;
+      renumberHistory();
       updateWorkoutTabStyle(); refreshSuggestions();
       populateDateFilters("stats"); renderStats();
       populateDateFilters("hist");

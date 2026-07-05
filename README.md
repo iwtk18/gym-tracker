@@ -77,6 +77,7 @@ Update [what changed]
 
 | Version | Date | Summary |
 |---------|------|---------|
+| v1.4 | Jul 2026 | Fix workout numbering on delete, dropdown filter replaces pills, sticky history header, set reorder arrows |
 | v1.3 | Apr 2026 | Paste-to-plan importer, drag-drop reorder, stat accordions, filter pill fix |
 | v1.2 | Apr 2026 | Bug fixes, toasts, collapsible history, exercise reordering, edit completed workouts |
 | v1.1 | Mar 2026 | Cardio support, exercise library, changelog overlay, date filters, data export/import |
